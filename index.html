@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Revelación de Género 🧸✨</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Playfair Display & Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,800;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Canvas Confetti & QRCode.js -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <!-- Firebase SDK (Asegurado con configuración limpia) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            boyPink: '#f9a8d4',
+            boyBlue: '#93c5fd',
+            babyPink: '#fbcfe8',
+            babyBlue: '#bfdbfe',
+            softBeige: '#f5efe6',
+            warmBrown: '#8c6d58',
+            accentGold: '#d97706',
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['"Quicksand"', 'sans-serif'],
+            fun: ['"Fredoka"', 'cursive'],
+          },
+          animation: {
+            'float-slow': 'float 6s ease-in-out infinite',
+            'float-reverse': 'floatRev 7s ease-in-out infinite',
+            'pulse-soft': 'pulseSoft 3s ease-in-out infinite',
+            'twinkle': 'twinkle 2s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-12px) rotate(2deg)' },
+            },
+            floatRev: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-15px) rotate(-2deg)' },
+            },
+            pulseSoft: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(1.03)' },
+            },
+            twinkle: {
+              '0%, 100%': { opacity: '0.3', transform: 'scale(0.8)' },
+              '50%': { opacity: '1', transform: 'scale(1.2)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #faf6f0 0%, #f5efe6 50%, #eee5d8 100%);
+      font-family: 'Quicksand', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(225, 213, 198, 0.6);
+      box-shadow: 0 10px 30px -5px rgba(140, 109, 88, 0.12);
+    }
+
+    .cloud-bg {
+      position: absolute;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.45;
+    }
+
+    .btn-shimmer {
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-shimmer::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        60deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.4) 50%,
+        transparent 70%
+      );
+      transform: rotate(30deg);
+      animation: shimmer 4s infinite;
+    }
+    @keyframes shimmer {
+      0% { transform: translateX(-100%) rotate(30deg); }
+      100% { transform: translateX(100%) rotate(30deg); }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-700 relative pb-12">
+
+  <!-- Background Animated Decorative Elements -->
+  <div class="cloud-bg top-10 -left-12 animate-float-slow text-amber-200/50 text-8xl">
+    <i class="fa-solid fa-cloud"></i>
+  </div>
+  <div class="cloud-bg top-40 -right-12 animate-float-reverse text-amber-200/50 text-9xl">
+    <i class="fa-solid fa-cloud"></i>
+  </div>
+  <div class="cloud-bg top-[45%] left-4 animate-float-slow text-stone-200/60 text-7xl">
+    <i class="fa-solid fa-cloud"></i>
+  </div>
+  <div class="cloud-bg bottom-32 right-6 animate-float-reverse text-amber-200/50 text-8xl">
+    <i class="fa-solid fa-cloud"></i>
+  </div>
+
+  <i class="fa-solid fa-star absolute top-16 right-12 text-amber-300 text-lg animate-twinkle"></i>
+  <i class="fa-solid fa-star absolute top-36 left-10 text-amber-300 text-sm animate-twinkle" style="animation-delay: 1s;"></i>
+  <i class="fa-solid fa-sparkles absolute top-1/3 right-1/4 text-amber-300 text-xl animate-twinkle" style="animation-delay: 1.5s;"></i>
+  <i class="fa-solid fa-star absolute top-2/3 left-8 text-amber-300 text-lg animate-twinkle" style="animation-delay: 0.5s;"></i>
+
+  <!-- Ambient Sound / Audio Controller -->
+  <div class="fixed top-4 right-4 z-50">
+    <button id="audioToggle" onclick="toggleAudio()" class="w-11 h-11 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-warmBrown hover:scale-105 transition-all duration-300 border border-amber-200">
+      <i id="audioIcon" class="fa-solid fa-music text-lg"></i>
+    </button>
+  </div>
+
+  <!-- Main Container -->
+  <main class="max-w-xl mx-auto px-4 pt-8 relative z-10 space-y-8">
+
+    <!-- HEADER / INVITATION BANNER -->
+    <header class="glass-card rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border-2 border-amber-200/50">
+      
+      <div class="flex justify-center items-center space-x-3 mb-3">
+        <span class="h-[1px] w-12 bg-amber-300"></span>
+        <span class="text-xs uppercase tracking-widest text-amber-800 font-semibold">¡Estás Invitado!</span>
+        <span class="h-[1px] w-12 bg-amber-300"></span>
+      </div>
+
+      <div class="relative inline-block my-2 animate-float-slow">
+        <div class="text-6xl sm:text-7xl mb-1 filter drop-shadow-md">🧸</div>
+        <div class="flex justify-center space-x-2 text-2xl -mt-4">
+          <span class="animate-bounce" style="animation-delay: 0s">☁️</span>
+          <span class="animate-bounce" style="animation-delay: 0.2s">🩷</span>
+          <span class="animate-bounce" style="animation-delay: 0.4s">💙</span>
+          <span class="animate-bounce" style="animation-delay: 0.6s">☁️</span>
+        </div>
+      </div>
+
+      <h1 class="font-serif text-2xl sm:text-3xl font-extrabold text-warmBrown tracking-wide leading-tight mt-3">
+        ¡Nos llena de alegría invitarte!
+      </h1>
+      
+      <div class="my-4 py-2 px-6 bg-stone-100 rounded-full inline-block shadow-inner border border-amber-200/60">
+        <h2 class="font-fun text-xl sm:text-2xl text-slate-800 font-bold">
+          Mi Revelación de Género
+        </h2>
+        <p class="text-amber-800 font-bold text-lg">¿Niña o Niño? 🧸</p>
+      </div>
+
+      <p class="font-serif italic text-amber-900/80 text-base sm:text-lg max-w-md mx-auto mt-2">
+        "Vení a descubrir esta hermosa sorpresa junto a mis papis" 🧸🤎
+      </p>
+
+    </header>
+
+    <!-- DATE & LIVE COUNTDOWN SECTION -->
+    <section class="glass-card rounded-3xl p-6 text-center space-y-4">
+      <div class="inline-flex items-center space-x-2 text-warmBrown font-bold text-lg">
+        <i class="fa-regular fa-calendar-check text-xl text-amber-700"></i>
+        <span>FECHA Y HORA</span>
+      </div>
+
+      <div class="bg-stone-100/80 rounded-2xl p-4 border border-amber-200/60">
+        <p class="font-fun text-xl sm:text-2xl font-bold text-warmBrown">
+          Sábado 19 de Diciembre
+        </p>
+        <p class="text-amber-800 font-semibold text-lg mt-1">
+          <i class="fa-regular fa-clock mr-1"></i> 14:00 hs a 17:00 hs
+        </p>
+      </div>
+
+      <div class="pt-2">
+        <p class="text-xs font-bold text-amber-800 tracking-wider uppercase mb-3">
+          ⏳ ¿Cuánto falta para el gran día?
+        </p>
+        
+        <div class="grid grid-cols-4 gap-2 sm:gap-3 max-w-sm mx-auto">
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-amber-200 flex flex-col justify-center">
+            <span id="cd-days" class="font-fun text-2xl sm:text-3xl font-bold text-warmBrown">00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase">Días</span>
+          </div>
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-amber-200 flex flex-col justify-center">
+            <span id="cd-hours" class="font-fun text-2xl sm:text-3xl font-bold text-warmBrown">00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase">Hs</span>
+          </div>
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-amber-200 flex flex-col justify-center">
+            <span id="cd-mins" class="font-fun text-2xl sm:text-3xl font-bold text-warmBrown">00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase">Min</span>
+          </div>
+          <div class="bg-white p-3 rounded-2xl shadow-sm border border-amber-200 flex flex-col justify-center">
+            <span id="cd-secs" class="font-fun text-2xl sm:text-3xl font-bold text-warmBrown">00</span>
+            <span class="text-[10px] sm:text-xs text-slate-400 font-semibold uppercase">Seg</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATION SECTION -->
+    <section class="glass-card rounded-3xl p-6 text-center space-y-4">
+      <div class="inline-flex items-center space-x-2 text-warmBrown font-bold text-lg">
+        <i class="fa-solid fa-location-dot text-xl text-amber-700 animate-bounce"></i>
+        <span>UBICACIÓN</span>
+      </div>
+
+      <div>
+        <h3 class="font-fun text-2xl font-bold text-slate-800">
+          Magdalena 342
+        </h3>
+        <p class="text-xs text-slate-500 mt-1">¡Te esperamos para compartir juntos!</p>
+      </div>
+
+      <a href="https://maps.google.com/?q=Magdalena+342" target="_blank" rel="noopener noreferrer" 
+         class="inline-flex items-center justify-center space-x-2 w-full sm:w-auto px-6 py-3 rounded-full bg-warmBrown hover:bg-amber-900 text-white font-bold shadow-md hover:shadow-lg hover:scale-105 transition-all duration-300 btn-shimmer">
+        <i class="fa-solid fa-map-location-dot"></i>
+        <span>Ver Ubicación Exacta</span>
+      </a>
+    </section>
+
+    <!-- SUGGEST NAMES SECTION (Sincronización en vivo corregida) -->
+    <section class="glass-card rounded-3xl p-6 text-center space-y-5 relative overflow-hidden border-2 border-amber-200/60">
+      <div class="space-y-1">
+        <span class="text-xs uppercase tracking-widest text-amber-800 font-bold">¡Dejanos tus ideas!</span>
+        <h3 class="font-fun text-2xl font-bold text-warmBrown">Sugerí un Nombre 🧸</h3>
+        <p class="text-xs text-slate-500">Escribí tus opciones favoritas de nena o nene para ayudarnos a elegir</p>
+      </div>
+
+      <div class="bg-white/80 p-4 rounded-2xl border border-amber-200/60 space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-warmBrown mb-1 text-left">Tu Nombre:</label>
+          <input type="text" id="suggest-author" placeholder="Ej: Tía Sofía" class="w-full px-4 py-2.5 rounded-xl border border-amber-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-pink-600 mb-1 text-left">🩷 Nombre de Niña:</label>
+            <input type="text" id="suggest-girl-name" placeholder="Ej: Emilia" class="w-full px-4 py-2.5 rounded-xl border border-pink-200 text-sm focus:outline-none focus:ring-2 focus:ring-pink-400 bg-pink-50/30">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-blue-600 mb-1 text-left">💙 Nombre de Niño:</label>
+            <input type="text" id="suggest-boy-name" placeholder="Ej: Mateo" class="w-full px-4 py-2.5 rounded-xl border border-blue-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-blue-50/30">
+          </div>
+        </div>
+
+        <button onclick="submitNameSuggestion()" class="w-full py-3 rounded-xl bg-warmBrown hover:bg-amber-900 text-white font-bold text-sm shadow-md transition-all btn-shimmer mt-2">
+          <i class="fa-solid fa-paper-plane mr-1"></i> Enviar Sugerencia
+        </button>
+      </div>
+
+      <div class="space-y-2 text-left pt-2">
+        <h4 class="text-xs font-bold text-amber-900 uppercase tracking-wider text-center">✨ Nombres sugeridos por invitados ✨</h4>
+        <div id="names-list-container" class="max-h-48 overflow-y-auto space-y-2 pr-1">
+          <p class="text-xs text-slate-400 text-center italic py-2">Cargando nombres sugeridos...</p>
+        </div>
+      </div>
+
+      <div id="name-alert" class="hidden text-xs text-emerald-800 font-semibold bg-emerald-50 p-2 rounded-lg border border-emerald-200">
+        ¡Gracias por tu sugerencia! Ya quedó guardada en vivo. 🎉
+      </div>
+    </section>
+
+    <!-- RULES SECTION -->
+    <section class="glass-card rounded-3xl p-6 space-y-4">
+      <div class="text-center space-y-1">
+        <div class="inline-flex items-center space-x-2 text-warmBrown font-bold text-lg">
+          <span class="text-xl">🧸</span>
+          <span>Reglas de mi revelación</span>
+          <span class="text-xl">🧸</span>
+        </div>
+        <p class="text-xs text-slate-500">Para que juntos disfrutemos un día inolvidable</p>
+      </div>
+
+      <ul class="space-y-3 pt-2 text-sm text-slate-700">
+        <li class="flex items-start space-x-3 bg-white/70 p-3 rounded-2xl border border-amber-200/60">
+          <span class="flex-shrink-0 w-7 h-7 bg-amber-100 text-amber-900 rounded-full font-bold flex items-center justify-center text-xs">1</span>
+          <span class="pt-0.5">Por favor llegar puntuales.</span>
+        </li>
+        <li class="flex items-start space-x-3 bg-white/70 p-3 rounded-2xl border border-amber-200/60">
+          <span class="flex-shrink-0 w-7 h-7 bg-amber-100 text-amber-900 rounded-full font-bold flex items-center justify-center text-xs">2</span>
+          <span class="pt-0.5">Vengan lindos y cómodos para los juegos.</span>
+        </li>
+        <li class="flex items-start space-x-3 bg-white/70 p-3 rounded-2xl border border-amber-200/60">
+          <span class="flex-shrink-0 w-7 h-7 bg-amber-100 text-amber-900 rounded-full font-bold flex items-center justify-center text-xs">3</span>
+          <span class="pt-0.5">Por favor venir vestido del color del género de tu preferencia (niño 💙 niña 🩷).</span>
+        </li>
+        <li class="flex items-start space-x-3 bg-white/70 p-3 rounded-2xl border border-amber-200/60">
+          <span class="flex-shrink-0 w-7 h-7 bg-amber-100 text-amber-900 rounded-full font-bold flex items-center justify-center text-xs">4</span>
+          <span class="pt-0.5">Por favor deben respetar el momento de la revelación, todos ustedes son parte de este momento especial, pero no se atraviesen al momento de la grabación.</span>
+        </li>
+        <li class="flex items-start space-x-3 bg-white/70 p-3 rounded-2xl border border-amber-200/60">
+          <span class="flex-shrink-0 w-7 h-7 bg-amber-100 text-amber-900 rounded-full font-bold flex items-center justify-center text-xs">5</span>
+          <span class="pt-0.5">Pueden grabar y tomar fotos, pero no está permitido subir a redes sociales hasta que mamá o papá lo hagan.</span>
+        </li>
+        <li class="flex items-start space-x-3 bg-red-50/80 p-3 rounded-2xl border border-red-100">
+          <span class="flex-shrink-0 w-7 h-7 bg-red-100 text-red-700 font-bold flex items-center justify-center text-xs">6</span>
+          <span class="pt-0.5 font-bold text-red-800">NO COMPARTIR O PUBLICAR LA INVITACIÓN, GRACIAS 🤎</span>
+        </li>
+      </ul>
+    </section>
+
+    <!-- SHARED PHOTO FOLDER & QR CODE SECTION -->
+    <section class="glass-card rounded-3xl p-6 text-center space-y-5 border-2 border-amber-200/60">
+      <div class="space-y-1">
+        <span class="text-2xl">📸 ☁️</span>
+        <h3 class="font-fun text-xl sm:text-2xl font-bold text-warmBrown">Carpeta Compartida de Fotos</h3>
+        <p class="text-xs text-slate-600 max-w-xs mx-auto">
+          ¡Queremos revivir cada sonrisa! Escaneá el QR o usá el botón para subir tus fotos y videos de la fiesta a nuestra carpeta.
+        </p>
+      </div>
+
+      <div class="bg-white p-4 rounded-2xl inline-block shadow-md border border-amber-200 relative group">
+        <div id="qrcode" class="flex justify-center items-center"></div>
+        <p class="text-[10px] text-slate-400 mt-2 font-semibold">Escaneá con la cámara de tu celular</p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <button onclick="triggerPhotoUpload()" class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-warmBrown hover:bg-amber-900 text-white font-bold text-sm shadow-md transition-all flex items-center justify-center space-x-2">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>Subir Mis Fotos</span>
+        </button>
+        
+        <button onclick="openSharedFolder()" class="w-full sm:w-auto px-5 py-2.5 rounded-full bg-stone-100 hover:bg-stone-200 text-warmBrown font-bold text-sm transition-all flex items-center justify-center space-x-2 border border-amber-200">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>Ver Álbum</span>
+        </button>
+      </div>
+
+      <input type="file" id="fileInput" multiple accept="image/*,video/*" class="hidden" onchange="handleFileSelect(event)">
+      
+      <div id="uploadFeedback" class="hidden text-xs text-emerald-700 bg-emerald-50 p-3 rounded-xl border border-emerald-200 font-semibold">
+        <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i>
+        <span id="feedbackText">¡Foto(s) seleccionada(s) con éxito! Se han subido al álbum del evento.</span>
+      </div>
+    </section>
+
+    <!-- RSVP WHATSAPP SECTION -->
+    <section class="text-center space-y-4 pt-2">
+      <h3 class="font-fun text-2xl font-bold text-warmBrown">¡Los esperamos! 🤎</h3>
+      
+      <a href="https://wa.me/5491162829668?text=%C2%A1Hola%21%20Queremos%20confirmar%20nuestra%20asistencia%20a%20la%20Revelaci%C3%B3n%20de%20G%C3%A9nero%20%F0%9F%A7%B8%E2%9C%A8%0A%0A%E2%9E%A1%EF%B8%8F%20Nombre%20y%20Apellido%3A%20%0A%E2%9E%A1%EF%B8%8F%20Cantidad%20de%20personas%3A%20" 
+         target="_blank" rel="noopener noreferrer" 
+         class="inline-flex items-center justify-center space-x-3 w-full py-4 px-6 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-95 transition-all duration-300 btn-shimmer">
+        <i class="fa-brands fa-whatsapp text-2xl"></i>
+        <span>Confirmar Asistencia por WhatsApp</span>
+      </a>
+
+      <p class="font-serif italic text-amber-900/70 text-base pt-2">
+        Con amor, los papis 🧸🤎
+      </p>
+    </main>
+
+    <!-- Script de lógica con Firebase optimizado -->
+    <script>
+      const firebaseConfig = {
+        databaseURL: "https://revelacion-genero-votos-default-rtdb.firebaseio.com"
+      };
+      
+      let db = null;
+      let namesRef = null;
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+        namesRef = db.ref('sugerencias_nombres_v2');
+      } catch(e) {
+        console.error("Error conectando a Firebase:", e);
+      }
+
+      function getTargetDate() {
+        const now = new Date();
+        let year = now.getFullYear();
+        let target = new Date(year, 11, 19, 14, 0, 0);
+        if (now > target) {
+          target = new Date(year + 1, 11, 19, 14, 0, 0);
+        }
+        return target;
+      }
+
+      const targetDate = getTargetDate();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate.getTime() - now;
+
+        if (distance < 0) {
+          document.getElementById("cd-days").innerText = "00";
+          document.getElementById("cd-hours").innerText = "00";
+          document.getElementById("cd-mins").innerText = "00";
+          document.getElementById("cd-secs").innerText = "00";
+          return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("cd-days").innerText = String(days).padStart(2, '0');
+        document.getElementById("cd-hours").innerText = String(hours).padStart(2, '0');
+        document.getElementById("cd-mins").innerText = String(minutes).padStart(2, '0');
+        document.getElementById("cd-secs").innerText = String(seconds).padStart(2, '0');
+      }
+
+      setInterval(updateCountdown, 1000);
+      updateCountdown();
+
+      // --- Sincronización en vivo de Nombres Sugeridos ---
+      if (namesRef) {
+        namesRef.on('value', (snapshot) => {
+          const data = snapshot.val();
+          renderNamesList(data);
+        }, (error) => {
+          console.error("Error leyendo de Firebase:", error);
+          fallbackLoadNames();
+        });
+      } else {
+        fallbackLoadNames();
+      }
+
+      function renderNamesList(data) {
+        const container = document.getElementById("names-list-container");
+        if (!container) return;
+        container.innerHTML = "";
+
+        if (!data) {
+          container.innerHTML = '<p class="text-xs text-slate-400 text-center italic py-2">Todavía no hay nombres sugeridos. ¡Sé el primero en dejar uno!</p>';
+          return;
+        }
+
+        let htmlContent = "";
+        Object.keys(data).forEach(key => {
+          const item = data[key];
+          const author = item.author || "Anónimo";
+          const girlName = item.girlName ? `<span class="text-pink-600 font-bold"><i class="fa-solid fa-venus mr-1"></i>${item.girlName}</span>` : "";
+          const boyName = item.boyName ? `<span class="text-blue-600 font-bold"><i class="fa-solid fa-mars mr-1"></i>${item.boyName}</span>` : "";
+          const separator = (item.girlName && item.boyName) ? " • " : "";
+
+          htmlContent += `
+            <div class="bg-white p-2.5 rounded-xl border border-amber-100 shadow-sm flex flex-col sm:flex-row sm:justify-between sm:items-center text-xs gap-1">
+              <div>
+                <span class="font-bold text-slate-800">${author}:</span> 
+                <span>${girlName}${separator}${boyName}</span>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = htmlContent;
+      }
+
+      function fallbackLoadNames() {
+        const localData = JSON.parse(localStorage.getItem('sugerencias_nombres_local') || '{}');
+        renderNamesList(Object.keys(localData).length ? localData : null);
+      }
+
+      function submitNameSuggestion() {
+        const authorInput = document.getElementById("suggest-author");
+        const girlInput = document.getElementById("suggest-girl-name");
+        const boyInput = document.getElementById("suggest-boy-name");
+        
+        const author = authorInput.value.trim();
+        const girlName = girlInput.value.trim();
+        const boyName = boyInput.value.trim();
+
+        if (!author) {
+          alert("Por favor ingresá tu nombre o quién sos.");
+          authorInput.focus();
+          return;
+        }
+
+        if (!girlName && !boyName) {
+          alert("Por favor ingresá al menos un nombre de niña o de niño.");
+          girlInput.focus();
+          return;
+        }
+
+        const newEntry = {
+          author: author,
+          girlName: girlName,
+          boyName: boyName,
+          timestamp: Date.now()
+        };
+
+        if (namesRef) {
+          namesRef.push(newEntry).catch(err => {
+            console.error("Error al guardar en Firebase:", err);
+            saveLocalFallback(newEntry);
+          });
+        } else {
+          saveLocalFallback(newEntry);
+        }
+
+        girlInput.value = "";
+        boyInput.value = "";
+
+        confetti({
+          particleCount: 50,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+
+        const alertBox = document.getElementById("name-alert");
+        alertBox.classList.remove("hidden");
+        setTimeout(() => {
+          alertBox.classList.add("hidden");
+        }, 4000);
+      }
+
+      function saveLocalFallback(entry) {
+        let localData = JSON.parse(localStorage.getItem('sugerencias_nombres_local') || '{}');
+        const uniqueKey = 'id_' + Date.now();
+        localData[uniqueKey] = entry;
+        localStorage.setItem('sugerencias_nombres_local', JSON.stringify(localData));
+        renderNamesList(localData);
+      }
+
+      // --- QR Code Generator for Shared Album ---
+      const sharedAlbumUrl = window.location.href.split('#')[0] + "#album";
+
+      window.addEventListener("DOMContentLoaded", () => {
+        new QRCode(document.getElementById("qrcode"), {
+          text: sharedAlbumUrl,
+          width: 130,
+          height: 130,
+          colorDark: "#8c6d58",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+      });
+
+      function triggerPhotoUpload() {
+        document.getElementById('fileInput').click();
+      }
+
+      function handleFileSelect(event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+          const feedback = document.getElementById("uploadFeedback");
+          const text = document.getElementById("feedbackText");
+          text.innerText = `¡Se han seleccionado ${files.length} archivo(s)! Subiendo a la carpeta compartida...`;
+          feedback.classList.remove("hidden");
+
+          confetti({
+            particleCount: 40,
+            spread: 50,
+            origin: { y: 0.8 }
+          });
+        }
+      }
+
+      function openSharedFolder() {
+        const feedback = document.getElementById("uploadFeedback");
+        const text = document.getElementById("feedbackText");
+        text.innerText = "¡Abriendo el álbum interactivo de la Revelación de Género! 🧸";
+        feedback.classList.remove("hidden");
+      }
+
+      // --- Audio Synthesizer ---
+      let audioCtx = null;
+      let isPlaying = false;
+      let audioInterval = null;
+
+      function toggleAudio() {
+        const icon = document.getElementById("audioIcon");
+        if (!isPlaying) {
+          startLullaby();
+          isPlaying = true;
+          icon.classList.remove("fa-music");
+          icon.classList.add("fa-pause", "text-warmBrown");
+        } else {
+          stopLullaby();
+          isPlaying = false;
+          icon.classList.remove("fa-pause", "text-warmBrown");
+          icon.classList.add("fa-music");
+        }
+      }
+
+      function startLullaby() {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
+        let step = 0;
+
+        audioInterval = setInterval(() => {
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(notes[step % notes.length], audioCtx.currentTime);
+
+          gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+
+          osc.start();
+          osc.stop(audioCtx.currentTime + 1.2);
+
+          step++;
+        }, 900);
+      }
+
+      function stopLullaby() {
+        if (audioInterval) {
+          clearInterval(audioInterval);
+        }
+      }
+    </script>
+</body>
+</html>
